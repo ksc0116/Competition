@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Golem : MonoBehaviour
 {
-    private int HP = 300;
+    public int HP = 300;
     private bool isDie = false;
 
-    [SerializeField]
     private Transform target;
 
     private bool isMove = false;
@@ -19,19 +18,24 @@ public class Golem : MonoBehaviour
 
     private float attackRange = 4f;
 
-    public SkinnedMeshRenderer skinnedMeshRenderer;
+    private SkinnedMeshRenderer skinnedMeshRenderer;
 
-    private void Awake()
+    public void Setup(Transform target)
     {
-        skinnedMeshRenderer=GetComponentInChildren<SkinnedMeshRenderer>();
+        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         anim = GetComponent<Animator>();
         StartCoroutine(IsmoveChange());
+        this.target = target;
+    }
+    private void Awake()
+    {
+        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
     }
     private void Update()
     {
-        LookTarget();
+/*        LookTarget();
         Pursuit();
-        LookTarget();
+        LookTarget();*/
     }
 
     private void Pursuit()

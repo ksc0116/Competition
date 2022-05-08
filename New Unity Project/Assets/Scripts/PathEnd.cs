@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class PathEnd : MonoBehaviour
 {
     [SerializeField]
+    private Transform target;
+
+    [SerializeField]
     private PathEndDoor door;
 
     [SerializeField]
@@ -15,20 +18,38 @@ public class PathEnd : MonoBehaviour
 
     [Header("Golems")]
     [SerializeField]
-    private GameObject[] golems;
+    private GameObject rockPrefab;
     [SerializeField]
+    private GameObject golemPrefab;
+    [SerializeField]
+    private Transform[] spawnPoint;
+
     private GameObject[] rocks;
+    private GameObject[] golems;
     private void Awake()
     {
-        fadeImage=fadeObj.GetComponent<Image>();
+        rocks=new GameObject[spawnPoint.Length];
+        golems= new GameObject[spawnPoint.Length];
+        fadeImage =fadeObj.GetComponent<Image>();
+        SetRock();
     }
-
+    private void SetRock()
+    {
+        for (int i = 0; i < spawnPoint.Length; i++)
+        {
+            rocks[i] = Instantiate(rockPrefab, spawnPoint[i].position, Quaternion.identity);
+            golems[i] = Instantiate(golemPrefab, spawnPoint[i].position, Quaternion.Euler(0,180f,0));
+            golems[i].SetActive(false);
+        }
+    }
     private void ChangeForm()
     {
-        for(int i = 0; i < golems.Length; i++)
+        for (int i = 0; i < golems.Length; i++)
         {
             rocks[i].gameObject.SetActive(false);
             golems[i].gameObject.SetActive(true);
+            Golem logic = golems[i].GetComponent<Golem>();
+            logic.Setup(target);
         }
     }
 
