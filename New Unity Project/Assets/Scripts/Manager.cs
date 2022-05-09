@@ -9,6 +9,7 @@ public class Manager : MonoBehaviour
     [Header("Manager")]
     public Manager_SE manager_SE;
     public GoblinSceneManager goblinSceneManager;
+    public GolemSceneManager golemSceneManager;
 
     private void Awake()
     {

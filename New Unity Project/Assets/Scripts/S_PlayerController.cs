@@ -152,7 +152,7 @@ public class S_PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         HP -= damage;
-        Debug.Log(HP - damage);
+        Debug.Log(HP);
         if (HP <= 0)
         {
             Debug.Log("GameOver");

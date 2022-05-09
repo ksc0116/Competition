@@ -18,6 +18,7 @@ TagManager:
   - Arrow
   - GolemPortal
   - Golem
+  - Player2
   layers:
   - Default
   - TransparentFX

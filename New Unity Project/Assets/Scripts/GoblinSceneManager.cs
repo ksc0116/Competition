@@ -42,7 +42,7 @@ public class GoblinSceneManager : MonoBehaviour
             currentTime += Time.deltaTime;
             percent = currentTime / closeTime;
 
-            door.position = Vector3.Lerp(door.position, openPos.position, percent);
+            door.position = Vector3.Lerp(door.localPosition, openPos.localPosition, percent);
 
             yield return null;
         }

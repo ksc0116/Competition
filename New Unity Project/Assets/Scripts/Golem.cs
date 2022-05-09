@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class Golem : MonoBehaviour
 {
-    public int HP = 300;
+    private CapsuleCollider attackCollider;
+    private BoxCollider boxCollider;
+
+    private int HP = 50;
+    private int attackPower = 60;
     private bool isDie = false;
 
     private Transform target;
@@ -22,33 +26,31 @@ public class Golem : MonoBehaviour
 
     public void Setup(Transform target)
     {
+        boxCollider=GetComponent<BoxCollider>();
+        attackCollider =GetComponent<CapsuleCollider>();
+        isDie = false;
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         anim = GetComponent<Animator>();
         StartCoroutine(IsmoveChange());
         this.target = target;
     }
-    private void Awake()
-    {
-        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-    }
     private void Update()
     {
-/*        LookTarget();
+        LookTarget();
+        Attack();
         Pursuit();
-        LookTarget();*/
     }
-
     private void Pursuit()
     {
-        if (isMove == false) return;
+        if (isMove == false || isDie==true) return;
 
-        Vector3 to = new Vector3(target.position.x, 0, target.position.z);
+/*        Vector3 to = new Vector3(target.position.x, 0, target.position.z);
 
-        Vector3 from = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 from = new Vector3(transform.position.x, 0, transform.position.z);*/
 
-        Vector3 moveDirection = (to - from).normalized;
+        /*Vector3 moveDirection = (to - from).normalized;*/
 
-        transform.position+=moveDirection*moveSpeed*Time.deltaTime;
+       transform.position=Vector3.MoveTowards(transform.position, target.position,moveSpeed*Time.deltaTime);
     }
 
     private IEnumerator IsmoveChange()
@@ -71,8 +73,9 @@ public class Golem : MonoBehaviour
 
     private void Attack()
     {
+        if(isDie == true) return;
         float distance =Vector3.Distance(transform.position, target.position);
-        if (distance <= attackRange)
+        if (distance <= attackRange && isAttack==false)
         {
             int index = Random.Range(0, 2);
             isAttack = true;
@@ -89,18 +92,38 @@ public class Golem : MonoBehaviour
     {
        isAttack=false;
     }
-
+    public void OnAttackCollider()
+    {
+        StartCoroutine(OnOff());
+    }
+    private IEnumerator OnOff()
+    {
+        attackCollider.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        attackCollider.enabled = false;
+    }
     public void TakeDamage(int damage)
     {
+        if(isDie==true) return;
         HP -= damage;
         if (HP <= 0)
         {
+            Manager.Instance.golemSceneManager.golemCount--;
+            boxCollider.enabled = false;
             isDie = true;
+            StartCoroutine(Die());
         }
         StartCoroutine(ChangeColor());
     }
+    private IEnumerator Die()
+    {
+        anim.SetTrigger("onDie");
+        yield return new WaitForSeconds(2.5f);
+        gameObject.SetActive(false);
+    }
     private IEnumerator ChangeColor()
     {
+        skinnedMeshRenderer.material.color = Color.white;
         Color color=skinnedMeshRenderer.material.color;
         skinnedMeshRenderer.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
@@ -111,5 +134,13 @@ public class Golem : MonoBehaviour
     {
         Gizmos.color = new Color(0.39f, 0.04f, 0.04f);
         Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "Player")
+        {
+            S_PlayerController logic = other.GetComponent<S_PlayerController>();
+            logic.TakeDamage(attackPower);
+        }
     }
 }
