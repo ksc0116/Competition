@@ -10,7 +10,7 @@ public class Manager : MonoBehaviour
     public Manager_SE manager_SE;
     public GoblinSceneManager goblinSceneManager;
     public GolemSceneManager golemSceneManager;
-
+    public OrcSceneManager orcSceneManager;
     private void Awake()
     {
         if (Instance !=this)
