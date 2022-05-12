@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float minDistance = 0.5f;
     [SerializeField]
-    private float maxDistance = 5f;
+    private float maxDistance = 15f;
     [SerializeField]
     private float finalDistance;
     private Vector3 rayVector;

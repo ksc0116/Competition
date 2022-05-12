@@ -19,6 +19,7 @@ TagManager:
   - GolemPortal
   - Golem
   - Player2
+  - Boss
   layers:
   - Default
   - TransparentFX

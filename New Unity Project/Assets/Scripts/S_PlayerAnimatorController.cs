@@ -85,5 +85,11 @@ public class S_PlayerAnimatorController : MonoBehaviour
             Golem logic = other.transform.GetComponent<Golem>();
             logic.TakeDamage(attackPower);
         }
+        else if (other.transform.tag == "Boss")
+        {
+            Debug.Log("¼º°ø");
+            Dragon logic = other.transform.GetComponent<Dragon>();
+            logic.TakeDamage(attackPower);
+        }
     }
 }

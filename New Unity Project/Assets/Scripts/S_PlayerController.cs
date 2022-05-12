@@ -6,7 +6,6 @@ public class S_PlayerController : MonoBehaviour
 {
     [SerializeField]
     private Transform center;
-    private bool isTimeSlow=false;
 
     [SerializeField]
     private LayerMask layerMask;
@@ -32,6 +31,7 @@ public class S_PlayerController : MonoBehaviour
     public bool isDash = false;
     public bool isCallBack = false;
     public bool isBorder = false;
+    public bool isFire = true;
 
     [Header("SpawnPosition")]
     [SerializeField]
@@ -158,6 +158,17 @@ public class S_PlayerController : MonoBehaviour
             Debug.Log("GameOver");
         }
     }
+    public IEnumerator TakeDotDamage(int damage)
+    {
+        if (isFire == true)
+        {
+            HP -= damage;
+            isFire = !isFire;
+            yield return new WaitForSeconds(0.5f);
+            isFire = !isFire;
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Portal")
