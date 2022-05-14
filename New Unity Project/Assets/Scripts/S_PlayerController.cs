@@ -25,13 +25,14 @@ public class S_PlayerController : MonoBehaviour
 
     private Rigidbody rigid;
 
-    public int HP = 0;
-    public int maxHP = 100;
+    public float HP = 0;
+    public float maxHP = 100;
 
     public bool isDash = false;
     public bool isCallBack = false;
     public bool isBorder = false;
     public bool isFire = true;
+    public bool isDownSkill = false;
 
     [Header("SpawnPosition")]
     [SerializeField]
@@ -45,6 +46,7 @@ public class S_PlayerController : MonoBehaviour
     [SerializeField]
     private GoblinSpawner goblinSpawner;
 
+
     private void Awake()
     {
         transform.position = tutorialPosition.position;
@@ -57,11 +59,9 @@ public class S_PlayerController : MonoBehaviour
         Move();
         Dash();
         CheckCollider();
-    }
-    private void LateUpdate()
-    {
         Attack();
     }
+
     private void Move()
     {
         if (isCallBack == true) return;

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class S_PlayerAnimatorController : MonoBehaviour
 {
-    [SerializeField]
     private int attackPower = 50;
+    public int AttackPower { get { return attackPower; } set { attackPower = value; } }
     [SerializeField]
     private BoxCollider attackCollider;
 
@@ -75,19 +75,17 @@ public class S_PlayerAnimatorController : MonoBehaviour
         }
         else if (other.transform.tag == "GroundGoblin")
         {
-            Debug.Log("성공");
             GoblinFSM logic = other.transform.GetComponent<GoblinFSM>();
             logic.TakeDamage(attackPower);
         }
         else if (other.transform.tag == "Golem")
         {
-            Debug.Log("성공");
             Golem logic = other.transform.GetComponent<Golem>();
             logic.TakeDamage(attackPower);
         }
         else if (other.transform.tag == "Boss")
         {
-            Debug.Log("성공");
+            
             Dragon logic = other.transform.GetComponent<Dragon>();
             logic.TakeDamage(attackPower);
         }
