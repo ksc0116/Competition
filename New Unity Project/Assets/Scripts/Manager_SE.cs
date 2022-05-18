@@ -10,4 +10,7 @@ public class Manager_SE : MonoBehaviour
     public AudioClip shot1;
     public AudioClip shot2;
     public AudioClip footStep;
+    public AudioClip dashSound;
+    public AudioClip swordSound;
+
 }

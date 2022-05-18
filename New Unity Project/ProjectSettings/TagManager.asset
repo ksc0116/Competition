@@ -20,6 +20,9 @@ TagManager:
   - Golem
   - Player2
   - Boss
+  - EnemyAttack
+  - PlayerShield
+  - HookAble
   layers:
   - Default
   - TransparentFX

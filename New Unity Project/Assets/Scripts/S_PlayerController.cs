@@ -5,6 +5,9 @@ using UnityEngine;
 public class S_PlayerController : MonoBehaviour
 {
     [SerializeField]
+    Blink playerDash;
+
+    [SerializeField]
     private Transform center;
 
     [SerializeField]
@@ -15,20 +18,19 @@ public class S_PlayerController : MonoBehaviour
     [SerializeField]
     private Transform cameraArm;
     [SerializeField]
-    public float moveSpeed = 5f;
-    [SerializeField]
     public S_PlayerAnimatorController playerAnimator;
     [SerializeField]
     private Transform playerOrigin;
     [SerializeField]
     private GameObject dashEffect;
 
+    public float moveSpeed = 5f;
+
     private Rigidbody rigid;
 
     public float HP = 0;
     public float maxHP = 100;
 
-    public bool isDash = false;
     public bool isCallBack = false;
     public bool isBorder = false;
     public bool isFire = true;
@@ -57,8 +59,8 @@ public class S_PlayerController : MonoBehaviour
     private void Update()
     {
         Move();
-        Dash();
-        CheckCollider();
+/*        Dash();
+        CheckCollider();*/
         Attack();
     }
 
@@ -88,7 +90,7 @@ public class S_PlayerController : MonoBehaviour
 
     private void SelMoveSpeed()
     {
-        if (playerAnimator.isAttack == true || isDash==true) return;
+        if (playerAnimator.isAttack == true || playerDash.isDash== true) return;
 
         if (Input.GetAxis("Vertical") >= 0)
         {
@@ -99,7 +101,7 @@ public class S_PlayerController : MonoBehaviour
             moveSpeed = 3f;
         }
     }
-    private void Dash()
+/*    private void Dash()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -141,7 +143,7 @@ public class S_PlayerController : MonoBehaviour
                 moveSpeed = 5f;
             }
         }
-    }
+    }*/
     private void Attack()
     {
         if (Input.GetMouseButtonDown(0))

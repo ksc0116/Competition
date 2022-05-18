@@ -849,7 +849,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.0056497175
+      - time: 0.0028642023
         functionName: AttackStartMoveSpeed
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -865,6 +865,27 @@ ModelImporter:
         messageOptions: 0
       - time: 1
         functionName: AttackEndMoveSpeed
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.37903222
+        functionName: PlaySE
+        data: 
+        objectReferenceParameter: {fileID: 8300000, guid: 890d43709c006a24cbaa87a251caa3bc, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.008032144
+        functionName: RightSwordVFXOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9839357
+        functionName: RightSwordVFXOff
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1167,6 +1188,27 @@ ModelImporter:
         messageOptions: 0
       - time: 1
         functionName: AttackEndMoveSpeed
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.31048396
+        functionName: PlaySE
+        data: 
+        objectReferenceParameter: {fileID: 8300000, guid: 890d43709c006a24cbaa87a251caa3bc, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.008032144
+        functionName: LeftSwordVFXOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.99598384
+        functionName: LeftSwordVFXOff
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1540,6 +1582,20 @@ ModelImporter:
         floatParameter: 0
         intParameter: 3
         messageOptions: 0
+      - time: 0.028714895
+        functionName: RightSwordVFXOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.13306452
+        functionName: PlaySE
+        data: 
+        objectReferenceParameter: {fileID: 8300000, guid: 0553fae04f1f70e4ba9f78826619a453, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.18809976
         functionName: AttackCollider
         data: 
@@ -1547,7 +1603,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.46129712
+      - time: 0.42807898
+        functionName: RightSwordVFXOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.46963048
         functionName: AttackEndMoveSpeed
         data: 
         objectReferenceParameter: {instanceID: 0}
