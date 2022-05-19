@@ -27,9 +27,9 @@ public class GoblinLogic : MonoBehaviour
     [SerializeField]
     private SkinnedMeshRenderer skinnedMeshRenderer;
 
-
     private bool isDie = false;
 
+    LineRenderer lr;
     public void SetUp(Transform target)
     {
         this.target = target;
@@ -37,6 +37,7 @@ public class GoblinLogic : MonoBehaviour
 
     private void Awake()
     {
+        lr=GetComponent<LineRenderer>();
         boxCollider.enabled = true;
         anim = GetComponent<Animator>();
     }
@@ -70,16 +71,26 @@ public class GoblinLogic : MonoBehaviour
             anim.SetTrigger("onAttack");
         }
     }
+    // 애니메이션 이벤트에서 호출
     public void Shot()
     {
-        GameObject arrow = Instantiate(arrowPrefab, firePos.position,Quaternion.identity);
+        GameObject arrow = Instantiate(arrowPrefab, firePos.position, Quaternion.identity);
         arrow.transform.localScale = Vector3.one * 0.2f;
-        arrow.transform.rotation = Quaternion.LookRotation(target.position- arrow.transform.position);
-        Rigidbody arrowRigid=arrow.transform.GetComponent<Rigidbody>();
-        Arrow arrowLogic=arrow.GetComponent<Arrow>();
+        arrow.transform.rotation = Quaternion.LookRotation(target.position - arrow.transform.position);
+        Rigidbody arrowRigid = arrow.transform.GetComponent<Rigidbody>();
+        Arrow arrowLogic = arrow.GetComponent<Arrow>();
+        arrowLogic.Setup(lr);
+        DrawLine();
         arrowRigid.AddForce((target.position - arrow.transform.position).normalized * arrowLogic.moveSpeed, ForceMode.VelocityChange);
     }
-    
+
+    private void DrawLine()
+    {
+        lr.positionCount=2;
+        lr.SetPosition(0, firePos.position);
+        lr.SetPosition(1, target.position+new Vector3(0,-1.0f,0));
+    }
+
     public void TakeDamage(int damage)
     {
         HP -= damage;

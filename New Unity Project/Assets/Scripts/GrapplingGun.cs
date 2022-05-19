@@ -28,6 +28,9 @@ public class GrapplingGun : MonoBehaviour
     bool hooked=false;
     bool isCool = false;
 
+    Vector3 tempForward=Vector3.zero;
+    Vector3 tempUp= Vector3.zero;
+
     private void Awake()
     {
         coolTimeImage.fillAmount = 0;
@@ -83,6 +86,8 @@ public class GrapplingGun : MonoBehaviour
         Ray ray = Camera.main.ViewportPointToRay(Vector2.one * 0.5f);
         if (Physics.Raycast(ray,  out hit, maxDistance, whatIsgrappleable))
         {
+            tempForward = characterTransform.transform.forward;
+            tempUp = characterTransform.transform.up;
             hooked = true;
             grapplePoint = hit.point;
             
@@ -104,8 +109,8 @@ public class GrapplingGun : MonoBehaviour
             player.position = Vector3.MoveTowards(player.position, grapplePoint, 20f * Time.deltaTime);
             if(distanceFromPoint < 1)
             {
-                player.Translate(characterTransform.transform.forward * Time.deltaTime * 50f);
-                player.Translate(characterTransform.transform.up * Time.deltaTime * 60f);
+                player.Translate(tempForward * Time.deltaTime * 50f);
+                player.Translate( tempUp* Time.deltaTime * 60f);
                 StopGrapple();
             }
         }

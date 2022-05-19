@@ -44,6 +44,7 @@ public class CameraController : MonoBehaviour
     {
         LookAround();
         Zoom();
+        AutoCameraPosition();
     }
     private void LookAround()
     {
@@ -67,18 +68,19 @@ public class CameraController : MonoBehaviour
     {
         zoomDistance -= Input.GetAxis("Mouse ScrollWheel") * mouseWheelSpeed * Time.deltaTime;
         zoomDistance = Mathf.Clamp(zoomDistance, minDistance, maxDistance);
+        finalDistance = zoomDistance;
     }
-    private void LateUpdate()
+/*    private void LateUpdate()
     {
         if (isOnShake == true) return;
 
         RaycastHit hit;
         rayVector = transform.position - cameraArm.position;
         Debug.DrawRay(cameraArm.position, rayVector.normalized * finalDistance, Color.black);
-        if (Physics.Raycast(cameraArm.position, rayVector, out hit, layerMask))
+        if (Physics.Raycast(cameraArm.position, rayVector.normalized, out hit, finalDistance, layerMask))
         {
             finalDistance = Mathf.Clamp(hit.distance, minDistance, zoomDistance);
-
+            Debug.Log(hit.transform.name);
         }
         else
         {
@@ -87,5 +89,17 @@ public class CameraController : MonoBehaviour
 
         transform.position = transform.rotation * new Vector3(0, 0, -finalDistance) + cameraArm.position;
         //transform.position = Vector3.Lerp(transform.position, transform.rotation * new Vector3(0, 0, -finalDistance) + cameraArm.position, 0.1f);
+    }*/
+    private void AutoCameraPosition()
+    {
+        RaycastHit hit;
+        rayVector = transform.position - cameraArm.position;
+        Debug.DrawRay(cameraArm.position, rayVector.normalized * finalDistance, Color.black);
+        if (Physics.Raycast(cameraArm.position, rayVector.normalized, out hit, zoomDistance, layerMask))
+        {
+            /*finalDistance = Mathf.Clamp(hit.distance, minDistance, hit.distance);*/
+            finalDistance = hit.distance;
+        }
+        transform.position = transform.rotation * new Vector3(0, 0, -finalDistance) + cameraArm.position;
     }
 }
