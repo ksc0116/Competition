@@ -14,9 +14,11 @@ public class Arrow : MonoBehaviour
 
     LineRenderer lr;
 
-    public void Setup(LineRenderer lr)
+    MemoryPool memoryPool;
+    public void Setup(MemoryPool pool,LineRenderer lr)
     {
         this.lr = lr;
+        memoryPool = pool;
     }
 
     private void Update()
@@ -39,18 +41,18 @@ public class Arrow : MonoBehaviour
         else if (other.gameObject.tag == "Player")
         {
             lr.positionCount = 0;
-            Destroy(gameObject);
+            memoryPool.DeactivePoolItem(this.gameObject);
             other.gameObject.GetComponent<S_PlayerController>().TakeDamage(damage);
         }
         else if (other.gameObject.tag == "PlayerShield")
         {
             lr.positionCount = 0;
-            Destroy(gameObject);
+            memoryPool.DeactivePoolItem(this.gameObject);
         }
     }
     private IEnumerator Destroy()
     {
         yield return new WaitForSeconds(1f);
-        Destroy(gameObject);
+        memoryPool.DeactivePoolItem(this.gameObject);
     }
 }

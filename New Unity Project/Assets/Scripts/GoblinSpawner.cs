@@ -37,6 +37,8 @@ public class GoblinSpawner : MonoBehaviour
         {
             GameObject clone = Instantiate(hunterGoblinPrefab, hunterSpawnPoints[i].position, Quaternion.identity);
             GoblinLogic cloneLogic = clone.GetComponent<GoblinLogic>();
+            ArrowMemoryPool pool=clone.GetComponent<ArrowMemoryPool>();
+            pool.Setup(target);
             cloneLogic.SetUp(target);
         }
     }

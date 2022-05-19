@@ -1067,6 +1067,7 @@ GameObject:
   - component: {fileID: 5119300095331422612}
   - component: {fileID: 5119300095331422616}
   - component: {fileID: 1700093525246140097}
+  - component: {fileID: 8340904737828075727}
   m_Layer: 10
   m_Name: HunterGoblin
   m_TagString: HunterGoblin
@@ -1244,6 +1245,21 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &8340904737828075727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7923604687615640800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a97ed6560e36424b93f0fe35f73e85e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 5402142358056948183, guid: 0220a196b2408ff49a06292c2ef931b0, type: 3}
+  target: {fileID: 0}
+  firePos: {fileID: 5119300094998444323}
 --- !u!1 &7923604687615640802
 GameObject:
   m_ObjectHideFlags: 0
