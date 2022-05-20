@@ -6,7 +6,8 @@ public class Arrow : MonoBehaviour
 {
     private int damage = 5;
 
-    public float moveSpeed = 50f;
+    private float moveSpeed = 15f;
+    public float MoveSpeed {  get { return moveSpeed; }  }
 
     private bool isGrounded = false;
 
@@ -15,12 +16,15 @@ public class Arrow : MonoBehaviour
     LineRenderer lr;
 
     MemoryPool memoryPool;
+
+
+    Transform target;
     public void Setup(MemoryPool pool,LineRenderer lr)
     {
+        moveSpeed = 15f;
         this.lr = lr;
         memoryPool = pool;
     }
-
     private void Update()
     {
         if (isGrounded == true)
