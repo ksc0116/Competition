@@ -109,8 +109,8 @@ public class GrapplingGun : MonoBehaviour
             player.position = Vector3.MoveTowards(player.position, grapplePoint, 20f * Time.deltaTime);
             if(distanceFromPoint < 1)
             {
-                player.Translate(tempForward * Time.deltaTime * 50f);
-                player.Translate( tempUp* Time.deltaTime * 60f);
+                player.Translate(tempForward * Time.deltaTime * 100f);
+                player.Translate( tempUp* Time.deltaTime * 110f);
                 StopGrapple();
             }
         }

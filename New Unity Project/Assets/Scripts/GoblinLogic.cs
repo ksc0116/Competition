@@ -75,7 +75,7 @@ public class GoblinLogic : MonoBehaviour
     // 애니메이션 이벤트에서 호출
     public void Shot()
     {
-        pool.SpawnArrow(firePos.position);
+        pool.SpawnArrow(firePos.position,target);
     }
 
 

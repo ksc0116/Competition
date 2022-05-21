@@ -13,16 +13,11 @@ public class Arrow : MonoBehaviour
 
     private Vector3 tempPos;
 
-    LineRenderer lr;
 
     MemoryPool memoryPool;
-
-
-    Transform target;
-    public void Setup(MemoryPool pool,LineRenderer lr)
+    public void Setup(MemoryPool pool)
     {
         moveSpeed = 15f;
-        this.lr = lr;
         memoryPool = pool;
     }
     private void Update()
@@ -36,7 +31,6 @@ public class Arrow : MonoBehaviour
     {
         if (other.gameObject.tag == "Ground")
         {
-            lr.positionCount = 0;
             isGrounded = true;
             tempPos = transform.position;
             moveSpeed = 0.0f;
@@ -44,13 +38,11 @@ public class Arrow : MonoBehaviour
         }
         else if (other.gameObject.tag == "Player")
         {
-            lr.positionCount = 0;
             memoryPool.DeactivePoolItem(this.gameObject);
             other.gameObject.GetComponent<S_PlayerController>().TakeDamage(damage);
         }
         else if (other.gameObject.tag == "PlayerShield")
         {
-            lr.positionCount = 0;
             memoryPool.DeactivePoolItem(this.gameObject);
         }
     }

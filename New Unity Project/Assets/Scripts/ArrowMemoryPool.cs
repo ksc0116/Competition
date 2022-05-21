@@ -13,21 +13,19 @@ public class ArrowMemoryPool : MonoBehaviour
     Transform target;
     [SerializeField]
     Transform firePos;
-    public void Setup(Transform target)
-    {
-        this.target = target;
-    }
+
     private void Awake()
     {
         lr=GetComponent<LineRenderer>();
         memoryPool = new MemoryPool(arrowPrefab);
     }
 
-    public void SpawnArrow(Vector3 position)
+    public void SpawnArrow(Vector3 position,Transform target)
     {
+        this.target=target;
         DrawLine();
         GameObject item = memoryPool.ActivePoolItem();
-        item.GetComponent<Arrow>().Setup(memoryPool, lr);
+        item.GetComponent<Arrow>().Setup(memoryPool);
         item.transform.position = position;
         item.transform.rotation = Quaternion.LookRotation(target.position - item.transform.position);
         item.transform.localScale = Vector3.one * 0.2f;
@@ -41,5 +39,11 @@ public class ArrowMemoryPool : MonoBehaviour
         lr.positionCount = 2;
         lr.SetPosition(0, firePos.position);
         lr.SetPosition(1, target.position + new Vector3(0, -1.0f, 0));
+        StartCoroutine(AutoLineDestroy());
+    }
+    private IEnumerator AutoLineDestroy()
+    {
+        yield return new WaitForSeconds(0.5f);
+        lr.positionCount=0;
     }
 }

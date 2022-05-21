@@ -6,6 +6,8 @@ public enum BossState { None=-1,Set1=0,Set2=1,Idle=2,Attack=3,Idle2=4}
 
 public class Dragon : MonoBehaviour
 {
+    MeteorMemoryPool meteorMemoryPool;
+
     private SkinnedMeshRenderer skinnedMeshRenderer;
 
     private float MaxHP = 100;
@@ -58,6 +60,7 @@ public class Dragon : MonoBehaviour
 
     private void Awake()
     {
+        meteorMemoryPool=GetComponent<MeteorMemoryPool>();
         HP = MaxHP;
         skinnedMeshRenderer=GetComponentInChildren<SkinnedMeshRenderer>();  
         anim = GetComponent<Animator>();
@@ -249,9 +252,10 @@ public class Dragon : MonoBehaviour
     {
         for(int i = 0; i < 8; i++)
         {
-            GameObject meteor = Instantiate(meteorPrefab, meteorSpanwPos.position, Quaternion.identity);
-            Meteor logic = meteor.GetComponent<Meteor>();
-            logic.Setup(target);
+            /*GameObject meteor = Instantiate(meteorPrefab, meteorSpanwPos.position, Quaternion.identity);*/
+            GameObject meteor = meteorMemoryPool.SpawnMeteor();
+            meteor.transform.position = meteorSpanwPos.position;
+            meteor.transform.rotation = Quaternion.identity;
             yield return new WaitForSeconds(0.25f);
         }
     }
