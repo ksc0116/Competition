@@ -29,6 +29,7 @@ public class ArrowMemoryPool : MonoBehaviour
         item.transform.position = position;
         item.transform.rotation = Quaternion.LookRotation(target.position - item.transform.position);
         item.transform.localScale = Vector3.one * 0.2f;
+        item.GetComponent<Rigidbody>().velocity = Vector3.zero; 
         item.GetComponent<Rigidbody>().AddForce((target.position - item.transform.position).normalized * item.GetComponent<Arrow>().MoveSpeed, ForceMode.Impulse);
         Debug.Log(item.GetComponent<Arrow>().MoveSpeed);
     }

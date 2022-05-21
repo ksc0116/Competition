@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ChangeBar : MonoBehaviour
 {
     [SerializeField]
+    TutorialManager tutorialManager;
+    [SerializeField]
     GameObject changeMagicPrefab;
     [SerializeField]
     GameObject arousalPrefab;
@@ -26,12 +28,36 @@ public class ChangeBar : MonoBehaviour
 
     private void Update()
     {
-        Change();
-        if (isCharge == false && isArousal==false)
+        if (tutorialManager.isTutorial == false)
         {
-            StartCoroutine(ChargeImage());
+            Change();
+            if (isCharge == false && isArousal == false)
+            {
+                StartCoroutine(ChargeImage());
+            }
+            // Ω∫≈» ∞≠»≠
+            PlayerArousal();
         }
-        PlayerArousal();
+        else
+        {
+            TutorialChange();
+        }
+    }
+    private void TutorialChange()
+    {
+        if (tutorialManager.tutorialChange == true || tutorialManager.isTutorial==true)
+        {
+            changeBarImage.fillAmount = 1;
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                changeMagicPrefab.SetActive(true);
+                arousalPrefab.SetActive(true);
+            }
+        }
+        else if(tutorialManager.tutorialChange == false || tutorialManager.isTutorial == true)
+        {
+            changeBarImage.fillAmount = 0;
+        }
     }
     private void Change()
     {

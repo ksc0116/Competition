@@ -30,6 +30,8 @@ public class S_PlayerDownSkill : MonoBehaviour
     bool isInputAble=true;
 
     public bool isDownSkill;
+
+    bool isCheckAble=false;
     private void Awake()
     {
         coolTimeImage.fillAmount = 0;
@@ -41,14 +43,21 @@ public class S_PlayerDownSkill : MonoBehaviour
     private void Update()
     {
         PlayerCircle();
-        PressDownSkill();
+        PressDownSkillInAir();
         CheckDownCollider();
+
+        if (Input.GetKeyDown(KeyCode.F) && isInputAble == true && checkGround.isGround == true)
+        {
+            StartCoroutine(PressDownSkillInGround());   
+        }
     }
 
-    private void PressDownSkill()
+    private void PressDownSkillInAir()
     {
         if (Input.GetKeyDown(KeyCode.F) && isInputAble==true && checkGround.isGround==false)
         {
+            isCheckAble = true;
+
             isInputAble = false;
 
             isDownSkill = true;
@@ -59,10 +68,30 @@ public class S_PlayerDownSkill : MonoBehaviour
             StartCoroutine(CoolTime());
             StartCoroutine(CoolTimeText());
         }
+
+    }
+    private IEnumerator PressDownSkillInGround()
+    {
+        isInputAble = false;
+
+        isDownSkill = true;
+
+        isCheckAble = false;
+
+        StartCoroutine(CoolTime());
+        StartCoroutine(CoolTimeText());
+
+        rigid.isKinematic = true;
+        rigid.isKinematic = false;
+        rigid.AddForce(Vector3.up*10f, ForceMode.Impulse);
+        yield return new WaitForSeconds(1f);
+        isCheckAble = true;
+        rigid.AddForce(Vector3.down*100f, ForceMode.Impulse);
     }
 
     private void CheckDownCollider()
     {
+        if (isCheckAble == false) return;
         if (isDownSkill == true)
         {
             RaycastHit hit;

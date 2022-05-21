@@ -13,7 +13,7 @@ public class TutorialManager : MonoBehaviour
     private GameObject tutorialPortal;
 
     [SerializeField]
-    private PlayerController playerController;
+    private S_PlayerController playerController;
 
     [SerializeField]
     private GameObject popUpTextBox;
@@ -29,23 +29,13 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject systemRepeat;
 
-    private bool isFirst=true;
-
-    [SerializeField]
-    private GameObject groundEnemy;
-    [SerializeField]
-    private GameObject flyEnemy;
-
-    private bool isEnemyFirst=true;
 
     public bool isTutorial=true;
-
-    [SerializeField]
-    private GameObject building;
     [SerializeField]
     private GameObject grapCube;
 
-    
+
+    public bool tutorialChange = false;
     private void Awake()
     {
         if (isTutorial == false) return;
@@ -111,21 +101,21 @@ public class TutorialManager : MonoBehaviour
     // 튜토리얼 끝날 때 나오는 말
     private IEnumerator LastDialouge()
     {
-        systemDialouge[12].SetActive(true);
+        systemDialouge[7].SetActive(true);
         yield return new WaitForSeconds(2f);
-        systemDialouge[12].SetActive(false);
+        systemDialouge[7].SetActive(false);
 
-        systemDialouge[13].SetActive(true);
+        systemDialouge[8].SetActive(true);
         yield return new WaitForSeconds(2f);
-        systemDialouge[13].SetActive(false);
+        systemDialouge[8].SetActive(false);
 
-        systemDialouge[14].SetActive(true);
+        systemDialouge[9].SetActive(true);
         yield return new WaitForSeconds(2f);
-        systemDialouge[14].SetActive(false);
+        systemDialouge[9].SetActive(false);
 
-        systemDialouge[15].SetActive(true);
+        systemDialouge[10].SetActive(true);
         yield return new WaitForSeconds(2f);
-        systemDialouge[15].SetActive(false);
+        systemDialouge[10].SetActive(false);
     }
 /*    // 위 쪽 텍스트
     private void UpdateExplanation()
@@ -148,129 +138,48 @@ public class TutorialManager : MonoBehaviour
     {
         if (popUpIndex == 0)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(1)) return;
-            // 배틀 모드 진입
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.LeftShift)  || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Tab) ) return;
+            // 대쉬 사용하기
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 StartCoroutine(UpdateSystemdialouge());
             }
         }
         else if(popUpIndex == 1)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.E)|| Input.GetKeyDown(KeyCode.R)|| Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Tab) || Input.GetMouseButtonDown(0)) return;
-            // 에임 모드 진입
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.F)|| Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Tab) ) return;
+            // 쉴드 사용하기
+            if (Input.GetKeyDown(KeyCode.R))
             {
                 StartCoroutine(UpdateSystemdialouge());
             }
         }
         else if (popUpIndex == 2)
         {
-            if (isFirst == true)
-            {
-                playerController.CurShotCount = 1;
-                playerController.state = PlayerState.Battle;
-            }
-            isFirst = false;
-            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Tab)|| Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)|| Input.GetMouseButtonDown(1)) return;
-            // 재장전
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.Tab)|| Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.R) ) return;
+            // 내려찍기
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 StartCoroutine(UpdateSystemdialouge());
             }
         }
         else if (popUpIndex == 3)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) return;
-            // 대쉬
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Space)) return;
+            // 그래플링
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 StartCoroutine(UpdateSystemdialouge());
             }
         }
-        else if (popUpIndex==4)
+        else if (popUpIndex == 4)
         {
-            if(isFirst == true)
+            if (Input.GetKeyDown(KeyCode.F)  || Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Space)|| Input.GetKeyDown(KeyCode.LeftShift)) return;
+            // 각성모드
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
-                playerController.CurShotCount = 1;
-                playerController.HP = 10;
-                playerController.state = PlayerState.Battle;
-            }
-            isFirst=false;
-            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) return;
-            // 시간 되돌리기
-            if (Input.GetKeyDown(KeyCode.E))
-            {
+                tutorialChange = true;
                 StartCoroutine(UpdateSystemdialouge());
-            }
-        }
-        else if (popUpIndex == 5)
-        {
-            if (isFirst == true)
-            {
-                building.SetActive(true);
-                grapCube.SetActive(true);
-            }
-            isFirst = false;
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) return;
-            // 그래플링 훅
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                building.SetActive(false);
-                grapCube.SetActive(false);
-                StartCoroutine(UpdateSystemdialouge());
-            }
-        }
-        else if (popUpIndex == 6)
-        {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(1)) return;
-            // 일반 공격
-            if (Input.GetMouseButtonDown(0) && playerController.state == PlayerState.Battle)
-            {
-                StartCoroutine(UpdateSystemdialouge());
-            }
-        }
-        else if (popUpIndex == 7)
-        {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.R)) return;
-            // 에임 공격
-            if (Input.GetMouseButton(1) && Input.GetMouseButtonDown(0))
-            {
-                StartCoroutine(UpdateSystemdialouge());
-            }
-        }
-        else if(popUpIndex == 8)
-        {
-            // 걸어다니는 적 공격하기
-            if (isFirst == true)
-            {
-                groundEnemy.SetActive(true);
-            }
-            isFirst = false;
-            if (groundEnemy.activeSelf == false)
-            {
-                if (isEnemyFirst == true)
-                {
-                    StartCoroutine(UpdateSystemdialouge());
-                }
-                isEnemyFirst = false;
-            }
-        }
-        else if (popUpIndex==9)
-        {
-            // 날아 다니는 적 공격하기
-            if(isFirst == true)
-            {
-                flyEnemy.SetActive(true);
-            }
-            isFirst = false;
-            if (flyEnemy.activeSelf == false)
-            {
-                if(isEnemyFirst == true)
-                {
-                    StartCoroutine(UpdateSystemdialouge());
-                }
-                isEnemyFirst= false;
             }
         }
     }
@@ -289,7 +198,7 @@ public class TutorialManager : MonoBehaviour
         if (popUpIndex == popUpText.Length-1)
         {
             tutorialPortal.SetActive(true);
-            isTutorial = false;
+            /*isTutorial = false;*/
             StartCoroutine(LastDialouge());
             yield break;
         }
@@ -309,7 +218,5 @@ public class TutorialManager : MonoBehaviour
         popUpTextBox.SetActive(true);
         popUpIndex++;
         popUpText[popUpIndex].SetActive(true);
-        isFirst = true;
-        isEnemyFirst=true;
     }
 }

@@ -13,8 +13,13 @@ public class Arrow : MonoBehaviour
 
     private Vector3 tempPos;
 
-
     MemoryPool memoryPool;
+
+    Rigidbody rigid;
+    private void Awake()
+    {
+        rigid = GetComponent<Rigidbody>();
+    }
     public void Setup(MemoryPool pool)
     {
         moveSpeed = 15f;

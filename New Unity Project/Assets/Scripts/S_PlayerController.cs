@@ -5,6 +5,9 @@ using UnityEngine;
 public class S_PlayerController : MonoBehaviour
 {
     [SerializeField]
+    TutorialManager tutorialManager;
+
+    [SerializeField]
     Blink playerDash;
 
     [SerializeField]
@@ -175,6 +178,7 @@ public class S_PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Portal")
         {
             transform.position = goblinScenePlayerSpawnPoint.position;
+            tutorialManager.isTutorial = false;
             //enemyMemoryPool.SetActive(true);
         }
     }
