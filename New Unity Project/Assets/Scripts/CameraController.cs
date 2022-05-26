@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public S_PlayerController player;
+
     [SerializeField]
     private Transform cameraArm;
     [SerializeField]
@@ -32,9 +34,6 @@ public class CameraController : MonoBehaviour
     public bool isOnShake { set; get; } 
     private void Awake()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-
         finalDistance=Vector3.Distance(transform.position, cameraArm.position);
 
         zoomDistance = maxDistance / 2.0f;
@@ -42,9 +41,12 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        LookAround();
-        Zoom();
-        AutoCameraPosition();
+        if (player.isPause == false)
+        {
+            LookAround();
+            Zoom();
+            AutoCameraPosition();
+        }
     }
     private void LookAround()
     {

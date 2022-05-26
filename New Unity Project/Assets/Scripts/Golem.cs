@@ -1,14 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Golem : MonoBehaviour
 {
+    [Header("HP바")]
+    [SerializeField] Transform HpBar;
+    Camera cam;
+    [SerializeField] Slider hpSlider;
+
     private CapsuleCollider attackCollider;
     private BoxCollider boxCollider;
 
-    private int HP = 50;
+    private float HP;
+    float maxHP = 100f;
     private int attackPower = 60;
+    float attackRate=2.5f;
+    float lastAttackTime;
     private bool isDie = false;
 
     private Transform target;
@@ -18,12 +27,18 @@ public class Golem : MonoBehaviour
 
     private Animator anim;
 
-    private float moveSpeed = 2f;
+    public float moveSpeed = 2f;
 
     private float attackRange = 4f;
 
     private SkinnedMeshRenderer skinnedMeshRenderer;
 
+    private void Awake()
+    {
+        HpBar.gameObject.SetActive(false);
+        cam = Camera.main;
+        HP = maxHP;
+    }
     public void Setup(Transform target)
     {
         boxCollider=GetComponent<BoxCollider>();
@@ -39,10 +54,14 @@ public class Golem : MonoBehaviour
         LookTarget();
         Attack();
         Pursuit();
+        Quaternion q_hp = Quaternion.LookRotation(HpBar.position - cam.transform.position);
+        Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000).eulerAngles;
+        HpBar.rotation = Quaternion.Euler(0, hp_angle.y, 0);
+        hpSlider.value = HP / maxHP;
     }
     private void Pursuit()
     {
-        if (isMove == false || isDie==true) return;
+        if (isMove == false || isDie==true ) return;
 
 /*        Vector3 to = new Vector3(target.position.x, 0, target.position.z);
 
@@ -50,7 +69,8 @@ public class Golem : MonoBehaviour
 
         /*Vector3 moveDirection = (to - from).normalized;*/
 
-       transform.position=Vector3.MoveTowards(transform.position, target.position,moveSpeed*Time.deltaTime);
+        Vector3 moveDir=new Vector3(target.position.x,transform.position.y,target.position.z); 
+       transform.position=Vector3.MoveTowards(transform.position, moveDir, moveSpeed*Time.deltaTime);
     }
 
     private IEnumerator IsmoveChange()
@@ -75,8 +95,9 @@ public class Golem : MonoBehaviour
     {
         if(isDie == true) return;
         float distance =Vector3.Distance(transform.position, target.position);
-        if (distance <= attackRange && isAttack==false)
+        if (distance <= attackRange && isAttack==false &&   Time.time - lastAttackTime > attackRate)
         {
+            lastAttackTime = Time.time;
             int index = Random.Range(0, 2);
             isAttack = true;
             if (index == 0) anim.SetTrigger("onAttack1");
@@ -87,10 +108,12 @@ public class Golem : MonoBehaviour
     public void AttackStart()
     {
         isAttack = true;
+        moveSpeed = 0;
     }
     public void AttackEnd()
     {
        isAttack=false;
+        moveSpeed = 2f;
     }
     public void OnAttackCollider()
     {
@@ -102,12 +125,14 @@ public class Golem : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         attackCollider.enabled = false;
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         if(isDie==true) return;
+        HpBar.gameObject.SetActive(true);
         HP -= damage;
         if (HP <= 0)
         {
+            HpBar.gameObject.SetActive(false);
             Manager.Instance.golemSceneManager.golemCount--;
             boxCollider.enabled = false;
             isDie = true;
@@ -134,11 +159,13 @@ public class Golem : MonoBehaviour
     {
         Gizmos.color = new Color(0.39f, 0.04f, 0.04f);
         Gizmos.DrawWireSphere(transform.position, attackRange);
+
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.tag == "Player")
         {
+            Debug.Log("플레이어 공격");
             S_PlayerController logic = other.GetComponent<S_PlayerController>();
             logic.TakeDamage(attackPower);
         }

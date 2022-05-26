@@ -6,10 +6,10 @@ public class Arrow : MonoBehaviour
 {
     private int damage = 5;
 
-    private float moveSpeed = 15f;
+    private float moveSpeed = 25f;
     public float MoveSpeed {  get { return moveSpeed; }  }
 
-    private bool isGrounded = false;
+    public bool isGrounded = false;
 
     private Vector3 tempPos;
 
@@ -22,7 +22,7 @@ public class Arrow : MonoBehaviour
     }
     public void Setup(MemoryPool pool)
     {
-        moveSpeed = 15f;
+        moveSpeed = 25f;
         memoryPool = pool;
     }
     private void Update()
@@ -54,6 +54,7 @@ public class Arrow : MonoBehaviour
     private IEnumerator Destroy()
     {
         yield return new WaitForSeconds(1f);
+        isGrounded = false;
         memoryPool.DeactivePoolItem(this.gameObject);
     }
 }

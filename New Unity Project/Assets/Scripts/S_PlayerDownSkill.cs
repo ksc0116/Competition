@@ -7,6 +7,8 @@ using TMPro;
 public class S_PlayerDownSkill : MonoBehaviour
 {
     [SerializeField]
+    GameObject downSkillArea;
+    [SerializeField]
     LayerMask layerMask;
     [SerializeField]
     GameObject smallExplosionPrefab;
@@ -99,11 +101,17 @@ public class S_PlayerDownSkill : MonoBehaviour
             if (Physics.Raycast(transform.position + new Vector3(0, 0.5f, 0), Vector3.down, out hit, 0.6f,layerMask))
             {
                 isDownSkill = false;
+                StartCoroutine(AreaOnOff());
                 Instantiate(smallExplosionPrefab,hit.point,Quaternion.identity);
             }
         }
     }
-
+    private IEnumerator AreaOnOff()
+    {
+        downSkillArea.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        downSkillArea.SetActive(false);
+    }
     private void PlayerCircle()
     {
         RaycastHit hit;

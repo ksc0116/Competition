@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MainMap.unity
     guid: c22d827af7df5408b9a38b64e33bfd9c
+  - enabled: 1
+    path: Assets/StartScreen.unity
+    guid: c2c2ef475d3fa964a9da2454e607afb3
   m_configObjects: {}

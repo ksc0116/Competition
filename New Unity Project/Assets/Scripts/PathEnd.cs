@@ -62,7 +62,7 @@ public class PathEnd : MonoBehaviour
         yield return StartCoroutine(FadeInOut(0, 1));
         ChangeForm();
         yield return StartCoroutine(FadeInOut(1, 0));
-
+        fadeObj.SetActive(false);
     }
 
     private IEnumerator FadeInOut(float start,float end)

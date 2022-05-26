@@ -8,13 +8,15 @@ public class PlaySound : MonoBehaviour
     Blink playerDash;
     [SerializeField]
     CheckGround playerGrounded;
+    [SerializeField]
+    AudioSource sfxSource;
     public void PlaySE(AudioClip clip)
     {
-        Manager.Instance.manager_SE.seAudio.PlayOneShot(clip);
+        Manager.Instance.manager_SE.seAudio.PlayOneShot(clip, sfxSource.volume);
     }
     public void PlayFootStepSE(float volume)
     {
         if (playerDash.isDash == true || playerGrounded.isGround==false) return;
-        Manager.Instance.manager_SE.seAudio.PlayOneShot(Manager.Instance.manager_SE.footStep, volume);
+        Manager.Instance.manager_SE.seAudio.PlayOneShot(Manager.Instance.manager_SE.footStep, sfxSource.volume* volume);
     }
 }

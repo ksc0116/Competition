@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class S_PlayerController : MonoBehaviour
 {
+    [Header("[Æ÷Áî ÆÇ³Ú]")]
+    public GameObject pausePanelObj;
+    public bool isPause = false;
+    public PausePanelController pausePanel;
+
     [SerializeField]
     TutorialManager tutorialManager;
 
@@ -27,7 +32,7 @@ public class S_PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject dashEffect;
 
-    public float moveSpeed = 5f;
+    public float moveSpeed = 10f;
 
     private Rigidbody rigid;
 
@@ -65,6 +70,8 @@ public class S_PlayerController : MonoBehaviour
 /*        Dash();
         CheckCollider();*/
         Attack();
+        PausePanelOnOff();
+        MouseCursor();
     }
 
     private void Move()
@@ -97,7 +104,7 @@ public class S_PlayerController : MonoBehaviour
 
         if (Input.GetAxis("Vertical") >= 0)
         {
-            moveSpeed = 5f;
+            moveSpeed = 10f;
         }
         else if(Input.GetAxis("Vertical") < 0)
         {
@@ -149,6 +156,8 @@ public class S_PlayerController : MonoBehaviour
     }*/
     private void Attack()
     {
+        if (isPause == true) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             playerAnimator.AttackAni();
@@ -173,6 +182,35 @@ public class S_PlayerController : MonoBehaviour
         }
     }
 
+    private void PausePanelOnOff()
+    {
+        if (pausePanel.isOption == true) return;
+
+        if(Input.GetKeyDown(KeyCode.Escape) && isPause == true)
+        {
+            isPause = false;
+            pausePanelObj.SetActive(false);
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape) && isPause == false)
+        {
+            isPause = true;
+            pausePanelObj.SetActive(true);
+        }
+    }
+    private void MouseCursor()
+    {
+        if(isPause == true)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else if(isPause == false)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Portal")
@@ -188,5 +226,10 @@ public class S_PlayerController : MonoBehaviour
         {
             StartCoroutine(goblinSpawner.SpawnHunter());
         }
+    }
+    private void OnParticleCollision(GameObject other)
+    {
+        TakeDamage(5);
+        Debug.Log(HP);
     }
 }

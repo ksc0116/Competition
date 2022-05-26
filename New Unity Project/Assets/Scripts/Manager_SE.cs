@@ -12,5 +12,5 @@ public class Manager_SE : MonoBehaviour
     public AudioClip footStep;
     public AudioClip dashSound;
     public AudioClip swordSound;
-
+    public AudioClip dragonScream;
 }

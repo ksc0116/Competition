@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 public enum GoblinState {  None=-1, Wander=0, Pursuit, Attack,Die }
 public class GoblinFSM : MonoBehaviour
 {
+    [Header("HP¹Ù")]
+    [SerializeField] Transform HpBar;
+    Camera cam;
+    Slider hpSlider;
+
     [SerializeField]
     private BoxCollider boxCollider;
 
@@ -13,14 +19,15 @@ public class GoblinFSM : MonoBehaviour
 
     [Header("Status")]
     [SerializeField]
-    private int HP;
+    private float HP;
+    float maxHP = 100;
 
-    [Header("Persuit")]
+    [Header("Pursuit")]
     private float targetRecognitionRange = 3f;
     private float pursuitLimitRange = 4f;
 
     [Header("Attack")]
-    private float attackRange = 1f;
+    private float attackRange = 1.5f;
     [SerializeField]
     private float attackRate = 1f;
     private float lastAttackTime = 0;
@@ -39,6 +46,9 @@ public class GoblinFSM : MonoBehaviour
     private SkinnedMeshRenderer skinnedMeshRenderer;
     private void Awake()
     {
+        hpSlider = GetComponentInChildren<Slider>(); 
+        HpBar.gameObject.SetActive(false);
+        cam = Camera.main;
         navMeshAgent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
     }
@@ -57,9 +67,15 @@ public class GoblinFSM : MonoBehaviour
     private void OnEnable()
     {
         StartCoroutine(navMeshOn());
-        HP = 100;
+        HP = maxHP;
     }
-
+    private void Update()
+    {
+        Quaternion q_hp=Quaternion.LookRotation(HpBar.position - cam.transform.position);
+        Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000 ).eulerAngles;
+        HpBar.rotation=Quaternion.Euler(0,hp_angle.y,0);
+        hpSlider.value = HP / maxHP;
+    }
     public void ChangeState(GoblinState newState)
     {
         if (goblinState == newState) return;
@@ -72,6 +88,7 @@ public class GoblinFSM : MonoBehaviour
     }
     private  IEnumerator Die()
     {
+        HpBar.gameObject.SetActive(false);
         yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
@@ -84,8 +101,6 @@ public class GoblinFSM : MonoBehaviour
         anim.SetBool("isWalk", isWalk);
         anim.SetBool("isRun", isRun);
 
-        float currentTime = 0;
-
         navMeshAgent.speed = 1f;
 
         navMeshAgent.SetDestination(CalculateWanderPosition());
@@ -96,8 +111,6 @@ public class GoblinFSM : MonoBehaviour
 
         while (true)
         {
-            currentTime += Time.deltaTime;
-
             to = new Vector3(navMeshAgent.destination.x, 0, navMeshAgent.destination.z);
             from = new Vector3(transform.position.x, 0, transform.position.z);
 
@@ -170,21 +183,25 @@ public class GoblinFSM : MonoBehaviour
     }
     private void CalculateDistanceToTargetAndSelectState()
     {
-        if (target == null) return;
+        if (target == null || isDie==true) return;
 
         float distance = Vector3.Distance(target.position, transform.position);
-        if (distance <= attackRange && isDie==false)
+        if (distance <= attackRange)
         {
             ChangeState(GoblinState.Attack);
         }
-        else if (distance <= pursuitLimitRange && isDie == false)
+        else if (distance <= pursuitLimitRange)
         {
             ChangeState(GoblinState.Pursuit);
         }
-        else if(distance>=targetRecognitionRange && isDie == false)
+        else if (distance > pursuitLimitRange)
         {
             ChangeState(GoblinState.Wander);
         }
+/*        else if(distance>=targetRecognitionRange)
+        {
+            ChangeState(GoblinState.Wander);
+        }*/
     }
 
     private IEnumerator Attack()
@@ -220,8 +237,8 @@ public class GoblinFSM : MonoBehaviour
         Gizmos.color = Color.black;
         Gizmos.DrawRay(transform.position, navMeshAgent.destination - transform.position);
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, targetRecognitionRange);
+/*        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, targetRecognitionRange);*/
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, pursuitLimitRange);
@@ -229,9 +246,10 @@ public class GoblinFSM : MonoBehaviour
         Gizmos.color = new Color(0.39f, 0.04f, 0.04f);
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         if (isDie == true) return;
+        HpBar.gameObject.SetActive(true);
         HP -= damage;
         if (HP <= 0)
         {

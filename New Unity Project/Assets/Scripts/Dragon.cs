@@ -1,17 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum BossState { None=-1,Set1=0,Set2=1,Idle=2,Attack=3,Idle2=4}
 
 public class Dragon : MonoBehaviour
 {
+    [SerializeField]
+    GameObject dragonUI;
+    [Header("HP¹Ù")]
+    [SerializeField] Transform HpBar;
+    Camera cam;
+    [SerializeField] Slider hpSlider;
+
+    [SerializeField]
+    AudioSource sfxAudio;
+
     MeteorMemoryPool meteorMemoryPool;
 
     private SkinnedMeshRenderer skinnedMeshRenderer;
 
-    private float MaxHP = 100;
-    private float HP = 0;
+   public float MaxHP = 300;
+   public float HP = 0;
 
     [SerializeField]
     private Transform target;
@@ -57,10 +68,12 @@ public class Dragon : MonoBehaviour
     GameObject meteorPrefab;
     [SerializeField]
     Transform meteorSpanwPos;
-
     private void Awake()
     {
-        meteorMemoryPool=GetComponent<MeteorMemoryPool>();
+        HpBar.gameObject.SetActive(false);
+        cam = Camera.main;
+
+        meteorMemoryPool =GetComponent<MeteorMemoryPool>();
         HP = MaxHP;
         skinnedMeshRenderer=GetComponentInChildren<SkinnedMeshRenderer>();  
         anim = GetComponent<Animator>();
@@ -77,6 +90,10 @@ public class Dragon : MonoBehaviour
         {
             Attack();
         }
+        Quaternion q_hp = Quaternion.LookRotation(HpBar.position - cam.transform.position);
+        Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000).eulerAngles;
+        HpBar.rotation = Quaternion.Euler(0, hp_angle.y, 0);
+        hpSlider.value = HP / MaxHP;
     }
     private IEnumerator Idle2()
     {
@@ -96,6 +113,8 @@ public class Dragon : MonoBehaviour
     public IEnumerator ScreamAni()
     {
         anim.SetTrigger("onScream");
+        yield return new WaitForSeconds(1f);
+        Manager.Instance.manager_SE.seAudio.PlayOneShot(Manager.Instance.manager_SE.dragonScream, sfxAudio.volume);
         yield return new WaitForSeconds(3.3f);
         ChangeState(BossState.Set1);
     }
@@ -289,13 +308,19 @@ public class Dragon : MonoBehaviour
     {
         anim.SetTrigger("onDie");
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         if (isDie == true) return;
-        HP-=damage;
+        dragonUI.SetActive(true);
+        dragonUI.GetComponent<DragonUI>().ChangeFillArea(damage);
+        HP -=damage;
+
+        HpBar.gameObject.SetActive(true);
         if (HP <= 0)
         {
+            HpBar.gameObject.SetActive(false);
             isDie = true;
+            dragonUI.SetActive(false);
             Die();
         }
         StartCoroutine(ChangeColor());

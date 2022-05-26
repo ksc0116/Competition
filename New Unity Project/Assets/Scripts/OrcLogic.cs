@@ -1,15 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 public enum OrcState {None=-1, Idle=0,Wander=1, Pursuit=2, Attack=3, Die = 4,First=5,Idle2=6}
 
 public class OrcLogic : MonoBehaviour
 {
+    [Header("HP¹Ù")]
+    [SerializeField] Transform HpBar;
+    Camera cam;
+    [SerializeField] Slider hpSlider;
+
     private Rigidbody rigid;
 
-    public BoxCollider boxCollider;
+    BoxCollider boxCollider;
     private SphereCollider attackCollider;
 
     public bool isReady;
@@ -17,7 +23,8 @@ public class OrcLogic : MonoBehaviour
     public OrcState orcState = OrcState.None;
 
     [Header("Status")]
-    public int HP = 100;
+    public float HP;
+    float maxHP = 100f;
 
     [Header("Pursuit")]
 /*    private float targetRecognitionRange=3f;
@@ -49,6 +56,9 @@ public class OrcLogic : MonoBehaviour
     private Transform setPos;
     private void Awake()
     {
+        HP = maxHP;
+        cam = Camera.main;
+        HpBar.gameObject.SetActive(false);
         attackCollider = GetComponent<SphereCollider>();
         rigid = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
@@ -56,7 +66,13 @@ public class OrcLogic : MonoBehaviour
         anim = GetComponent<Animator>();
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
     }
-
+    private void Update()
+    {
+        Quaternion q_hp = Quaternion.LookRotation(HpBar.position - cam.transform.position);
+        Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000).eulerAngles;
+        HpBar.rotation = Quaternion.Euler(0, hp_angle.y, 0);
+        hpSlider.value = HP / maxHP;
+    }
     public IEnumerator First()
     {
         isWalk = false;
@@ -195,15 +211,15 @@ public class OrcLogic : MonoBehaviour
         isWalk = false;
         isRun=true;
         anim.SetBool("isWalk", isWalk);
-        anim.SetBool("isRun", isRun);
+        
         Vector3 to = new Vector3(target.position.x, 0, target.position.z);
         Vector3 from = new Vector3(transform.position.x, 0, transform.position.z);
         Vector3 attackDir = to - from;
         navMeshAgent.ResetPath();
         LookRotationToTarget();
 
-        yield return new WaitForSeconds(0.1f);
-
+        yield return new WaitForSeconds(0.2f);
+        anim.SetBool("isRun", isRun);
         rigid.AddForce(attackDir.normalized*15f,ForceMode.Impulse);
         yield return new WaitForSeconds(0.15f);
         anim.SetTrigger("onAttack");
@@ -304,12 +320,14 @@ public class OrcLogic : MonoBehaviour
         }*/
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         if (isDie == true) return;
+        HpBar.gameObject.SetActive(true);
         HP -= damage;
         if (HP <= 0)
         {
+            HpBar.gameObject.SetActive(false);
             isDie = true;
             ChangeState(OrcState.Die);
         }

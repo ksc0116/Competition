@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class Blink : MonoBehaviour
 {
+    [SerializeField]
+    GameObject dashEffect;
+    [SerializeField]
+    AudioSource sfxSource;
     public Image[] dashImages;
     public S_PlayerController playerController;
     public Transform camTransform;
@@ -58,7 +62,7 @@ public class Blink : MonoBehaviour
     {
         uses -= 1;
 
-        Manager.Instance.manager_SE.seAudio.PlayOneShot(Manager.Instance.manager_SE.dashSound,0.5f);
+        Manager.Instance.manager_SE.seAudio.PlayOneShot(Manager.Instance.manager_SE.dashSound, sfxSource.volume * 0.5f); 
 
         if (uses < maxUses-1)
         {
@@ -66,10 +70,10 @@ public class Blink : MonoBehaviour
         }
 
         isDash = true;
-        /*dashEffect.SetActive(true);*/
+        dashEffect.SetActive(true);
         playerController.moveSpeed = 20f;
         yield return new WaitForSeconds(0.3f);
-        /*dashEffect.SetActive(false);*/
+        dashEffect.SetActive(false);
         playerController.moveSpeed = 5f;
         yield return new WaitForSeconds(0.1f);
         isDash = false;
@@ -88,7 +92,7 @@ public class Blink : MonoBehaviour
         if (Physics.Raycast(position, moveDirection.normalized, out hit, 1f, layerMask))
         {
             isBorder = true;
-            Debug.Log(hit.transform.name);
+            /*Debug.Log(hit.transform.name);*/
             playerController.moveSpeed = 0f;
         }
         else

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class OrcSpawner : MonoBehaviour
 {
+
     [SerializeField]
     private GameObject spawnPoint;
     [SerializeField]
@@ -43,6 +44,7 @@ public class OrcSpawner : MonoBehaviour
             finalCheck = true;
         }
     }
+
     private void Ready()
     {
         if (isFirst == true)
@@ -54,7 +56,6 @@ public class OrcSpawner : MonoBehaviour
                 for (int i = 0; i < orcs.Length; i++)
                 {
                     orcs[i].GetComponent<OrcLogic>().isReady = true;
-                    orcs[i].GetComponent<OrcLogic>().boxCollider.isTrigger = false;
                 }
             }
         }

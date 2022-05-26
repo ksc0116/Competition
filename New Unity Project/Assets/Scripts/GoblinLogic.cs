@@ -1,13 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GoblinLogic : MonoBehaviour
 {
+    [Header("HP바")]
+    [SerializeField] Transform HpBar;
+    Camera cam;
+    Slider hpSlider;
+
     [SerializeField]
     private BoxCollider boxCollider;
     [SerializeField]
-    private int HP = 100;
+    private float HP;
+    float maxHP = 100f;
 
     [SerializeField]
     private GameObject arrowPrefab;
@@ -38,6 +45,10 @@ public class GoblinLogic : MonoBehaviour
 
     private void Awake()
     {
+        hpSlider=GetComponentInChildren<Slider>();  
+        HpBar.gameObject.SetActive(false);
+        HP = maxHP;
+        cam = Camera.main;
         pool=GetComponent<ArrowMemoryPool>();
         boxCollider.enabled = true;
         anim = GetComponent<Animator>();
@@ -50,6 +61,10 @@ public class GoblinLogic : MonoBehaviour
             LookTarget();
             Attack();
         }
+        Quaternion q_hp = Quaternion.LookRotation(HpBar.position - cam.transform.position);
+        Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000).eulerAngles;
+        HpBar.rotation = Quaternion.Euler(0, hp_angle.y, 0);
+        hpSlider.value = HP / maxHP;
     }
 
     private void LookTarget()
@@ -66,25 +81,26 @@ public class GoblinLogic : MonoBehaviour
     {
         if (Time.time - lastAttackTime > attackRate)
         {
-            attackRate = Random.Range(2, 6);
+            attackRate = Random.Range(4, 8);
             lastAttackTime = Time.time;
 
             anim.SetTrigger("onAttack");
         }
     }
+
     // 애니메이션 이벤트에서 호출
     public void Shot()
     {
         pool.SpawnArrow(firePos.position,target);
     }
 
-
-
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
+        HpBar.gameObject.SetActive(true);
         HP -= damage;
         if (HP <= 0)
         {
+            HpBar.gameObject.SetActive(false);
             Manager.Instance.goblinSceneManager.hunterGoblinCount--;
             boxCollider.enabled = false;
             isDie = true;
