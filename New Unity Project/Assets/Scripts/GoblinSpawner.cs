@@ -5,6 +5,8 @@ using UnityEngine;
 public class GoblinSpawner : MonoBehaviour
 {
     [SerializeField]
+    DamageTextMemoryPool m_pool;
+    [SerializeField]
     private GoblinSceneManager goblinSceneManager;
 
     public Transform[] hunterSpawnPoints;
@@ -26,7 +28,7 @@ public class GoblinSpawner : MonoBehaviour
         {
             GameObject clone = Instantiate(groundGoblinPrefab, groundSpawnPoints[i].position, Quaternion.identity);
             GoblinFSM cloneLogic = clone.GetComponent<GoblinFSM>();
-            cloneLogic.SetUp(target);
+            cloneLogic.SetUp(target,m_pool);
         }
     }
     public IEnumerator SpawnHunter()
@@ -38,7 +40,7 @@ public class GoblinSpawner : MonoBehaviour
             GameObject clone = Instantiate(hunterGoblinPrefab, hunterSpawnPoints[i].position, Quaternion.identity);
             GoblinLogic cloneLogic = clone.GetComponent<GoblinLogic>();
             ArrowMemoryPool pool=clone.GetComponent<ArrowMemoryPool>();
-            cloneLogic.SetUp(target);
+            cloneLogic.SetUp(target,m_pool);
         }
     }
 }

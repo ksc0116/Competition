@@ -44,6 +44,8 @@ public class GoblinFSM : MonoBehaviour
 
     [SerializeField]
     private SkinnedMeshRenderer skinnedMeshRenderer;
+
+    DamageTextMemoryPool damageTextPool;
     private void Awake()
     {
         hpSlider = GetComponentInChildren<Slider>(); 
@@ -52,8 +54,9 @@ public class GoblinFSM : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
     }
-    public void SetUp(Transform target)
+    public void SetUp(Transform target,DamageTextMemoryPool pool)
     {
+        damageTextPool = pool;
         this.target = target;
     }
 
@@ -73,7 +76,7 @@ public class GoblinFSM : MonoBehaviour
     {
         Quaternion q_hp=Quaternion.LookRotation(HpBar.position - cam.transform.position);
         Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000 ).eulerAngles;
-        HpBar.rotation=Quaternion.Euler(0,hp_angle.y,0);
+        HpBar.rotation=Quaternion.Euler(hp_angle.x, hp_angle.y,0);
         hpSlider.value = HP / maxHP;
     }
     public void ChangeState(GoblinState newState)
@@ -250,6 +253,7 @@ public class GoblinFSM : MonoBehaviour
     {
         if (isDie == true) return;
         HpBar.gameObject.SetActive(true);
+        damageTextPool.SpawnDamageText(transform.position, damage);
         HP -= damage;
         if (HP <= 0)
         {

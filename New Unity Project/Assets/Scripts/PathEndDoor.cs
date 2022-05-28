@@ -5,6 +5,8 @@ using UnityEngine;
 public class PathEndDoor : MonoBehaviour
 {
     [SerializeField]
+    Transform doorPosition;
+    [SerializeField]
     private Transform closePos;
 
     private float closeTime = 100f;
@@ -19,7 +21,7 @@ public class PathEndDoor : MonoBehaviour
             currentTime += Time.deltaTime;
             percent = currentTime / closeTime;
 
-            transform.position = Vector3.Lerp(transform.position, closePos.position, percent);
+            doorPosition.transform.position = Vector3.Lerp(doorPosition.transform.position, closePos.position, percent);
 
             yield return null;
         }

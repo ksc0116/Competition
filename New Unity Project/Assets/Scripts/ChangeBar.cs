@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ChangeBar : MonoBehaviour
 {
     [SerializeField]
+    S_PlayerController m_playerController; //HP¿ë
+    [SerializeField]
     TutorialManager tutorialManager;
     [SerializeField]
     GameObject changeMagicPrefab;
@@ -69,9 +71,24 @@ public class ChangeBar : MonoBehaviour
             changeMagicPrefab.SetActive(true);
             StartCoroutine(DechargeImage());
             StartCoroutine(ChangeState());
+            StartCoroutine(PlayerHealthPlus());
         }
     }
-
+    private IEnumerator PlayerHealthPlus()
+    {
+        float percent = 0.0f;
+        float currentTime = 0.0f;
+        while (percent<1)
+        {
+            currentTime+=Time.deltaTime;
+            percent = currentTime / 30f;
+            if (m_playerController.HP < 100)
+            {
+                m_playerController.HP += 2;
+            }
+            yield return new WaitForSeconds(1f);
+        }
+    }
     private IEnumerator ChangeState()
     {
         yield return new WaitForSeconds(30f);

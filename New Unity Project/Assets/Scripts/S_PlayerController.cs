@@ -73,7 +73,6 @@ public class S_PlayerController : MonoBehaviour
         PausePanelOnOff();
         MouseCursor();
     }
-
     private void Move()
     {
         if (isCallBack == true) return;

@@ -8,6 +8,8 @@ public enum BossState { None=-1,Set1=0,Set2=1,Idle=2,Attack=3,Idle2=4}
 public class Dragon : MonoBehaviour
 {
     [SerializeField]
+    DamageTextMemoryPool m_pool;
+    [SerializeField]
     GameObject dragonUI;
     [Header("HP¹Ù")]
     [SerializeField] Transform HpBar;
@@ -92,7 +94,7 @@ public class Dragon : MonoBehaviour
         }
         Quaternion q_hp = Quaternion.LookRotation(HpBar.position - cam.transform.position);
         Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000).eulerAngles;
-        HpBar.rotation = Quaternion.Euler(0, hp_angle.y, 0);
+        HpBar.rotation = Quaternion.Euler(hp_angle.x, hp_angle.y, 0);
         hpSlider.value = HP / MaxHP;
     }
     private IEnumerator Idle2()
@@ -314,7 +316,7 @@ public class Dragon : MonoBehaviour
         dragonUI.SetActive(true);
         dragonUI.GetComponent<DragonUI>().ChangeFillArea(damage);
         HP -=damage;
-
+        m_pool.SpawnDamageText(transform.position + new Vector3(0, 1, 0), damage);
         HpBar.gameObject.SetActive(true);
         if (HP <= 0)
         {

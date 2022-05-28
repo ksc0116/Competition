@@ -38,8 +38,11 @@ public class GoblinLogic : MonoBehaviour
 
     ArrowMemoryPool pool;
 
-    public void SetUp(Transform target)
+    DamageTextMemoryPool damageTextPool;
+
+    public void SetUp(Transform target,DamageTextMemoryPool pool)
     {
+        damageTextPool = pool;
         this.target = target;
     }
 
@@ -63,7 +66,7 @@ public class GoblinLogic : MonoBehaviour
         }
         Quaternion q_hp = Quaternion.LookRotation(HpBar.position - cam.transform.position);
         Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000).eulerAngles;
-        HpBar.rotation = Quaternion.Euler(0, hp_angle.y, 0);
+        HpBar.rotation = Quaternion.Euler(hp_angle.x, hp_angle.y, 0);
         hpSlider.value = HP / maxHP;
     }
 
@@ -98,6 +101,7 @@ public class GoblinLogic : MonoBehaviour
     {
         HpBar.gameObject.SetActive(true);
         HP -= damage;
+        damageTextPool.SpawnDamageText(transform.position,damage);
         if (HP <= 0)
         {
             HpBar.gameObject.SetActive(false);

@@ -21,8 +21,11 @@ public class Blink : MonoBehaviour
     float coolDownTimer;
 
     bool isBorder;
+
+    Rigidbody rigid;
     private void Awake()
     {
+        rigid = GetComponent<Rigidbody>();
         maxUses = uses;
         coolDownTimer = 0;
     }
@@ -70,12 +73,14 @@ public class Blink : MonoBehaviour
         }
 
         isDash = true;
+        rigid.useGravity = false;
         dashEffect.SetActive(true);
         playerController.moveSpeed = 20f;
         yield return new WaitForSeconds(0.3f);
         dashEffect.SetActive(false);
         playerController.moveSpeed = 5f;
         yield return new WaitForSeconds(0.1f);
+        rigid.useGravity = true;
         isDash = false;
     }
 

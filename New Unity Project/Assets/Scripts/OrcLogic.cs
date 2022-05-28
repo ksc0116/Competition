@@ -54,6 +54,8 @@ public class OrcLogic : MonoBehaviour
     private int createnumber;
 
     private Transform setPos;
+
+    DamageTextMemoryPool m_pool;
     private void Awake()
     {
         HP = maxHP;
@@ -70,7 +72,7 @@ public class OrcLogic : MonoBehaviour
     {
         Quaternion q_hp = Quaternion.LookRotation(HpBar.position - cam.transform.position);
         Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000).eulerAngles;
-        HpBar.rotation = Quaternion.Euler(0, hp_angle.y, 0);
+        HpBar.rotation = Quaternion.Euler(hp_angle.x, hp_angle.y, 0);
         hpSlider.value = HP / maxHP;
     }
     public IEnumerator First()
@@ -248,8 +250,9 @@ public class OrcLogic : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Setup(Transform target,OrcSpawner orcSpawner,int createnumber,Transform setPos)
+    public void Setup(Transform target,OrcSpawner orcSpawner,int createnumber,Transform setPos,DamageTextMemoryPool pool)
     {
+        m_pool = pool;
         this.setPos = setPos;
         this.createnumber = createnumber;
         this.orcSpawner = orcSpawner;
@@ -325,6 +328,7 @@ public class OrcLogic : MonoBehaviour
         if (isDie == true) return;
         HpBar.gameObject.SetActive(true);
         HP -= damage;
+        m_pool.SpawnDamageText(transform.position, damage);
         if (HP <= 0)
         {
             HpBar.gameObject.SetActive(false);

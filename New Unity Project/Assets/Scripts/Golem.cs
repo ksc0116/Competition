@@ -33,14 +33,16 @@ public class Golem : MonoBehaviour
 
     private SkinnedMeshRenderer skinnedMeshRenderer;
 
+    DamageTextMemoryPool m_pool;
     private void Awake()
     {
         HpBar.gameObject.SetActive(false);
         cam = Camera.main;
         HP = maxHP;
     }
-    public void Setup(Transform target)
+    public void Setup(Transform target,DamageTextMemoryPool pool)
     {
+        m_pool = pool;
         boxCollider=GetComponent<BoxCollider>();
         attackCollider =GetComponent<CapsuleCollider>();
         isDie = false;
@@ -56,7 +58,7 @@ public class Golem : MonoBehaviour
         Pursuit();
         Quaternion q_hp = Quaternion.LookRotation(HpBar.position - cam.transform.position);
         Vector3 hp_angle = Quaternion.RotateTowards(HpBar.rotation, q_hp, 1000).eulerAngles;
-        HpBar.rotation = Quaternion.Euler(0, hp_angle.y, 0);
+        HpBar.rotation = Quaternion.Euler(hp_angle.x, hp_angle.y, 0);
         hpSlider.value = HP / maxHP;
     }
     private void Pursuit()
@@ -129,6 +131,7 @@ public class Golem : MonoBehaviour
     {
         if(isDie==true) return;
         HpBar.gameObject.SetActive(true);
+        m_pool.SpawnDamageText(transform.position+new Vector3(0,7,0),damage);
         HP -= damage;
         if (HP <= 0)
         {

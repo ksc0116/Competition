@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class PathEnd : MonoBehaviour
 {
     [SerializeField]
-    private Transform target;
+    DamageTextMemoryPool m_pool;
 
     [SerializeField]
-    private PathEndDoor door;
+    private Transform target;
+
 
     [SerializeField]
     private GameObject fadeObj;
@@ -26,8 +27,10 @@ public class PathEnd : MonoBehaviour
 
     private GameObject[] rocks;
     private GameObject[] golems;
+    PathEndDoor door;
     private void Awake()
     {
+        door = GetComponent<PathEndDoor>();
         rocks=new GameObject[spawnPoint.Length];
         golems= new GameObject[spawnPoint.Length];
         fadeImage =fadeObj.GetComponent<Image>();
@@ -49,7 +52,7 @@ public class PathEnd : MonoBehaviour
             rocks[i].gameObject.SetActive(false);
             golems[i].gameObject.SetActive(true);
             Golem logic = golems[i].GetComponent<Golem>();
-            logic.Setup(target);
+            logic.Setup(target,m_pool);
         }
     }
 

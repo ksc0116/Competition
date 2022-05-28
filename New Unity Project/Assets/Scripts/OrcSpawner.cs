@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class OrcSpawner : MonoBehaviour
 {
+    [SerializeField]
+    DamageTextMemoryPool m_pool;
 
     [SerializeField]
     private GameObject spawnPoint;
@@ -68,7 +70,7 @@ public class OrcSpawner : MonoBehaviour
             orcs[i].transform.parent = transform;
             orcs[i].name="orc"+i.ToString();
             OrcLogic logic = orcs[i].GetComponent<OrcLogic>();
-            logic.Setup(target,this,i,setPos[i]);
+            logic.Setup(target,this,i,setPos[i],m_pool);
             logic.ChangeState(OrcState.First);
             /*StartCoroutine( logic.FirstSetDestination(setPos[i]));*/
         }
