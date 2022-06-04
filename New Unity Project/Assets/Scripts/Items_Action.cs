@@ -25,7 +25,7 @@ public class Items_Action : MonoBehaviour, IPointerUpHandler, IPointerDownHandle
         transform.localScale = Vector3.one;
         if (releaseTime >= 0.1f)
         {
-            transform.SetParent(Manager.Instance.manager_Inven.curParent);
+            transform.SetParent(Manager.Instance.manager_Inven.mousePosition);
             transform.localPosition = Vector3.zero;
             img.raycastTarget = true;
             return;

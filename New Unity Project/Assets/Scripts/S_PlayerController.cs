@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class S_PlayerController : MonoBehaviour
 {
@@ -159,7 +160,7 @@ public class S_PlayerController : MonoBehaviour
     }*/
     private void Attack()
     {
-        if (isPause == true) return;
+        if (isPause == true || EventSystem.current.IsPointerOverGameObject()==true) return;
 
         if (Input.GetMouseButtonDown(0))
         {

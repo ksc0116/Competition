@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Item_Drop : MonoBehaviour, IDropHandler,IPointerClickHandler
+public class Item_Drop : MonoBehaviour, IDropHandler,IPointerEnterHandler
 {
     public bool inQuick = false;
     Image img;
@@ -17,7 +17,7 @@ public class Item_Drop : MonoBehaviour, IDropHandler,IPointerClickHandler
             item.SetParent(Manager.Instance.manager_Inven.curParent);
             item.localPosition = Vector3.zero;
         }
-        else
+        else if(inQuick==false)
         {
             Debug.Log("Inventory");
             Transform item = transform.GetChild(0);
@@ -29,9 +29,8 @@ public class Item_Drop : MonoBehaviour, IDropHandler,IPointerClickHandler
 
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        img = GetComponent<Image>();
-        img.color = Color.black;
+        Manager.Instance.manager_Inven.mousePosition = transform;
     }
 }

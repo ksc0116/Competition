@@ -9,4 +9,5 @@ public class Manager_Inven : MonoBehaviour
     public Transform selectedItem;
     public Transform curParent;
     public Transform parentOnDrag;
+    public Transform mousePosition;
 }
