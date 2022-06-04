@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class S_PlayerAnimatorController : MonoBehaviour
 {
+    [SerializeField]
+    PlayerStat playerStat;
+
     private int attackPower = 50;
     public int AttackPower { get { return attackPower; } set { attackPower = value; } }
     [SerializeField]
@@ -34,6 +37,7 @@ public class S_PlayerAnimatorController : MonoBehaviour
     {
         isAttack=true;
         playerController.moveSpeed = 0.5f;
+        playerStat.moveSpeed = 0.5f;
     }
     public void AttackEndMoveSpeed()
     {
@@ -41,10 +45,12 @@ public class S_PlayerAnimatorController : MonoBehaviour
         if (Input.GetAxis("Vertical") >= 0)
         {
             playerController.moveSpeed = 5f;
+            playerStat.moveSpeed = 5f;
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
             playerController.moveSpeed = 3f;
+            playerStat.moveSpeed = 3f;
         }
     }
     

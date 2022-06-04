@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class S_PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    PlayerStat playerStat;
+
     [Header("[Æ÷Áî ÆÇ³Ú]")]
     public GameObject pausePanelObj;
     public bool isPause = false;
@@ -56,7 +59,6 @@ public class S_PlayerController : MonoBehaviour
     [SerializeField]
     private GoblinSpawner goblinSpawner;
 
-
     private void Awake()
     {
         transform.position = tutorialPosition.position;
@@ -71,7 +73,7 @@ public class S_PlayerController : MonoBehaviour
         CheckCollider();*/
         Attack();
         PausePanelOnOff();
-        MouseCursor();
+        /*MouseCursor();*/
     }
     private void Move()
     {
@@ -104,10 +106,12 @@ public class S_PlayerController : MonoBehaviour
         if (Input.GetAxis("Vertical") >= 0)
         {
             moveSpeed = 10f;
+            playerStat.moveSpeed = moveSpeed;
         }
         else if(Input.GetAxis("Vertical") < 0)
         {
             moveSpeed = 3f;
+            playerStat.moveSpeed = moveSpeed;
         }
     }
 /*    private void Dash()

@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ChangeBar : MonoBehaviour
 {
     [SerializeField]
+    PlayerStat playerStat;
+    [SerializeField]
     S_PlayerController m_playerController; //HP¿ë
     [SerializeField]
     TutorialManager tutorialManager;
@@ -100,11 +102,13 @@ public class ChangeBar : MonoBehaviour
         if (isArousal == true)
         {
             playerController.AttackPower = 70;
+            playerStat.atk = 70;
             arousalPrefab.SetActive(true);
         }
         else if (isArousal == false)
         {
             playerController.AttackPower = 50;
+            playerStat.atk = 50;
             arousalPrefab.SetActive(false);
         }
     }
