@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemKind { Weapon=0, Potion}
 public class Items_Info : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public ItemKind itemKind;
+    public int atk_Bonus;
+    public float hp_Bonus;
+    public float mp_Bonus;
 }

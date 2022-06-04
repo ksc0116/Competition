@@ -8,6 +8,12 @@ public class FieldItem : MonoBehaviour
     public Inventory inventory;
     public Sprite itemImage;
 
+    Items_Info itemInfo;
+    private void Awake()
+    {
+        itemInfo = GetComponent<Items_Info>();
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Player")
